@@ -21,25 +21,34 @@ RUN apt-get install -qq curl gnupg2 lsb-release \
 # install ros 2
 RUN apt-get install -qq ros-foxy-desktop
 
+RUN echo "\nsource /opt/ros/foxy/setup.bash" >> /etc/skel/.bashrc
+
 # install openssh-server
 RUN apt-get install -qq openssh-server \
     && mkdir /var/run/sshd
 
 # install some more useful things
 RUN apt-get install -qq \
+        dnsutils \
+        iputils-ping \
+        mesa-utils \
         python3-pip \
         sudo \
         tmux \
+        vim \
     && pip3 install -U argcomplete
 
 # create unprivileged user
 RUN useradd -m -s /bin/bash ubuntu \
     && echo "ubuntu ALL=(ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/ubuntu \
     && mkdir -p -m 700 /home/ubuntu/.ssh \
-    && chown -R ubuntu:ubuntu /home/ubuntu/.ssh \
-    && echo "\nsource /opt/ros/foxy/setup.bash" >> /home/ubuntu/.bashrc
+    && chown -R ubuntu:ubuntu /home/ubuntu/.ssh
 
 ENV DEBIAN_FRONTEND=
+ENV DISPLAY=host.docker.internal:0
+RUN echo "export DISPLAY=\${DISPLAY:-$DISPLAY}" > /etc/profile.d/display.sh
+
 COPY bin/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["sleep", "infinity"]
+
+CMD ["/usr/sbin/sshd", "-D"]

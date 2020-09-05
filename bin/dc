@@ -4,14 +4,28 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 case "$1" in
-up)
+rebuild)
+    docker-compose rm -sf
     docker-compose build
     docker-compose up -d
     ;;
+restart)
+    docker-compose stop
+    docker-compose up -d
+    ;;
+up)
+    docker-compose up -d
+    ;;
 bash)
+    docker-compose up -d
     docker-compose exec -u ubuntu app bash
     ;;
+ssh)
+    docker-compose up -d
+    ssh -Y -p 8822 -o XAuthLocation=/opt/X11/bin/xauth ubuntu@localhost
+    ;;
 tmux)
+    docker-compose up -d
     docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
     ;;
 *)

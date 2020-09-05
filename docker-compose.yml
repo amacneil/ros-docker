@@ -3,10 +3,11 @@ services:
   app:
     build:
       context: .
-    environment:
-      - DISPLAY
+    # environment:
+    #   - DISPLAY
     volumes:
       - .:/src
+      - ./run/home/ubuntu:/home/ubuntu
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${HOME}/.ssh/id_rsa.pub:/home/ubuntu/.ssh/authorized_keys
     working_dir: /src

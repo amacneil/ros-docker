@@ -1,8 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# export X11 DISPLAY env var for all users
-echo "export DISPLAY=$DISPLAY" > /etc/profile.d/display.sh
+# initialize home directory
+if [ ! -f /home/ubuntu/.profile ]; then
+    cp -R /etc/skel/. /home/ubuntu
+    chown -R ubuntu:ubuntu /home/ubuntu
+fi
 
 # carry on
 exec "$@"
