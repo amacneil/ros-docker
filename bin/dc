@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+case "$1" in
+up)
+    docker-compose build
+    docker-compose up -d
+    ;;
+bash)
+    docker-compose exec -u ubuntu app bash
+    ;;
+tmux)
+    docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
+    ;;
+*)
+    echo "Usage: bin/dc [up|bash|tmux]"
+    exit 1
+    ;;
+esac
