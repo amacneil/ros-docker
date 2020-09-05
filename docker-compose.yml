@@ -3,6 +3,12 @@ services:
   app:
     build:
       context: .
+    environment:
+      - DISPLAY
     volumes:
       - .:/src
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${HOME}/.ssh/id_rsa.pub:/home/ubuntu/.ssh/authorized_keys
     working_dir: /src
+    ports:
+      - "8822:22"
