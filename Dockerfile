@@ -11,17 +11,22 @@ RUN apt-get update \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
-# add ros 2 sources
+# add ros sources
 RUN apt-get install -qq curl gnupg2 lsb-release \
-    && curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc \
-        | apt-key add - \
+    && curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - \
+    && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list' \
     && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list' \
     && apt-get update
+
+# install ros 1
+RUN apt-get install -qq ros-noetic-desktop
 
 # install ros 2
 RUN apt-get install -qq ros-foxy-desktop
 
-RUN echo "\nsource /opt/ros/foxy/setup.bash" >> /etc/skel/.bashrc
+# install node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get install -y nodejs
 
 # install openssh-server
 RUN apt-get install -qq openssh-server \
@@ -30,13 +35,21 @@ RUN apt-get install -qq openssh-server \
 # install some more useful things
 RUN apt-get install -qq \
         dnsutils \
+        dumb-init \
         iputils-ping \
         mesa-utils \
         python3-pip \
+        ros-noetic-rosbridge-suite \
         sudo \
         tmux \
         vim \
     && pip3 install -U argcomplete
+
+ENV DEBIAN_FRONTEND=
+ENV DISPLAY=host.docker.internal:0
+
+RUN echo "\nexport DISPLAY=\${DISPLAY:-$DISPLAY}" >> /etc/skel/.bashrc \
+    && echo "source /opt/ros/noetic/setup.bash" >> /etc/skel/.bashrc
 
 # create unprivileged user
 RUN useradd -m -s /bin/bash ubuntu \
@@ -44,11 +57,7 @@ RUN useradd -m -s /bin/bash ubuntu \
     && mkdir -p -m 700 /home/ubuntu/.ssh \
     && chown -R ubuntu:ubuntu /home/ubuntu/.ssh
 
-ENV DEBIAN_FRONTEND=
-ENV DISPLAY=host.docker.internal:0
-RUN echo "export DISPLAY=\${DISPLAY:-$DISPLAY}" > /etc/profile.d/display.sh
-
 COPY bin/docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "docker-entrypoint.sh"]
 
 CMD ["/usr/sbin/sshd", "-D"]

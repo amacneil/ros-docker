@@ -5,8 +5,9 @@ cd "$(dirname "$0")/.."
 
 case "$1" in
 rebuild)
-    docker-compose rm -sf
     docker-compose build
+    docker-compose stop
+    docker-compose rm -sf app
     docker-compose up -d
     ;;
 restart)
@@ -29,7 +30,7 @@ tmux)
     docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
     ;;
 *)
-    echo "Usage: bin/dc [up|bash|tmux]"
+    echo "Usage: bin/dc [up|bash|tmux|ssh|rebuild|restart]"
     exit 1
     ;;
 esac
