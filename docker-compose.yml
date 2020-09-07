@@ -13,3 +13,4 @@ services:
     working_dir: /src
     ports:
       - "8822:22"
+      - "9090:9090"
