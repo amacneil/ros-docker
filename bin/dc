@@ -3,34 +3,52 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+dc_build () {
+    docker-compose build
+}
+
+dc_stop () {
+    docker-compose stop
+    docker-compose rm -sf
+}
+
+dc_up () {
+    docker-compose up -d
+}
+
+dc_restart () {
+    dc_stop
+    dc_up
+}
+
 case "$1" in
 rebuild)
-    docker-compose build
-    docker-compose stop
-    docker-compose rm -sf app
-    docker-compose up -d
+    dc_build
+    dc_restart
     ;;
 restart)
-    docker-compose stop
-    docker-compose up -d
+    dc_restart
+    ;;
+stop)
+    dc_stop
     ;;
 up)
-    docker-compose up -d
+    dc_up
     ;;
 bash)
-    docker-compose up -d
+    dc_up
     docker-compose exec -u ubuntu app bash
     ;;
 ssh)
-    docker-compose up -d
+    dc_up
     ssh -Y -p 8822 -o XAuthLocation=/opt/X11/bin/xauth ubuntu@localhost
     ;;
 tmux)
-    docker-compose up -d
+    dc_up
     docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
     ;;
 *)
-    echo "Usage: bin/dc [up|bash|tmux|ssh|rebuild|restart]"
+    echo "Usage: bin/dc [bash|tmux|ssh|up|stop|rebuild|restart]"
     exit 1
     ;;
 esac
