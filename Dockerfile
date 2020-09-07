@@ -19,7 +19,7 @@ RUN apt-get install -qq curl gnupg2 lsb-release \
     && apt-get update
 
 # install ros 1
-RUN apt-get install -qq ros-noetic-desktop
+RUN apt-get install -qq ros-noetic-desktop ros-noetic-rosbridge-suite
 
 # install ros 2
 RUN apt-get install -qq ros-foxy-desktop
@@ -39,7 +39,6 @@ RUN apt-get install -qq \
         iputils-ping \
         mesa-utils \
         python3-pip \
-        ros-noetic-rosbridge-suite \
         sudo \
         tmux \
         vim \
