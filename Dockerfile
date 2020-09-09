@@ -38,6 +38,7 @@ RUN apt-get install -qq \
         dumb-init \
         iputils-ping \
         mesa-utils \
+        python-is-python3 \
         python3-pip \
         sudo \
         tmux \
