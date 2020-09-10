@@ -37,10 +37,12 @@ RUN apt-get install -qq \
     dnsutils \
     dumb-init \
     iputils-ping \
+    less \
     mesa-utils \
     mlocate \
     python-is-python3 \
     python3-argcomplete \
+    silversearcher-ag \
     sudo \
     tmux \
     vim
