@@ -22,7 +22,7 @@ dc_restart () {
 }
 
 case "$1" in
-rebuild)
+build)
     dc_build
     dc_restart
     ;;
@@ -48,7 +48,7 @@ tmux)
     docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
     ;;
 *)
-    echo "Usage: bin/dc [bash|tmux|ssh|up|stop|rebuild|restart]"
+    echo "Usage: bin/dc [bash|tmux|ssh|up|stop|build|restart]"
     exit 1
     ;;
 esac

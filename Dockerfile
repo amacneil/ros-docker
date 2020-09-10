@@ -34,22 +34,23 @@ RUN apt-get install -qq openssh-server \
 
 # install some more useful things
 RUN apt-get install -qq \
-        dnsutils \
-        dumb-init \
-        iputils-ping \
-        mesa-utils \
-        python-is-python3 \
-        python3-pip \
-        sudo \
-        tmux \
-        vim \
-    && pip3 install -U argcomplete
+    dnsutils \
+    dumb-init \
+    iputils-ping \
+    mesa-utils \
+    mlocate \
+    python-is-python3 \
+    python3-argcomplete \
+    sudo \
+    tmux \
+    vim
 
 ENV DEBIAN_FRONTEND=
 ENV DISPLAY=host.docker.internal:0
 
 RUN echo "\nexport DISPLAY=\${DISPLAY:-$DISPLAY}" >> /etc/skel/.bashrc \
-    && echo "source /opt/ros/noetic/setup.bash" >> /etc/skel/.bashrc
+    && echo "\nsource /opt/ros/noetic/setup.bash  # ros1" >> /etc/skel/.bashrc \
+    && echo "# source /opt/ros/foxy/setup.bash  # ros2" >> /etc/skel/.bashrc
 
 # create unprivileged user
 RUN useradd -m -s /bin/bash ubuntu \
@@ -60,4 +61,5 @@ RUN useradd -m -s /bin/bash ubuntu \
 COPY bin/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "docker-entrypoint.sh"]
 
+RUN updatedb
 CMD ["/usr/sbin/sshd", "-D"]
