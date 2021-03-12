@@ -2,6 +2,8 @@
 
 Run ROS in a docker container, complete with X11 forwarding on macOS. Includes ROS 1 and 2.
 
+# Instructions
+
 ```sh
 $ bin/dc            # show help
 $ bin/dc build      # build container
@@ -17,4 +19,8 @@ $ bin/dc tmssh      # run tmux (with iTerm integration) over ssh (with X forward
 
 Home directory is mapped locally to `./run/home/ubuntu`.
 
-Edit `~/.bashrc` inside the container (or `./run/home/ubuntu/.bashrc`) to uncomment `setup.bash` for ROS 1 or ROS 2.
+Edit `~/.bashrc` inside the container (or `./run/home/ubuntu/.bashrc` on your host) to uncomment `setup.bash` for ROS 1 or ROS 2.
+
+## Proof
+
+![Screenshot](screenshot.jpg)
