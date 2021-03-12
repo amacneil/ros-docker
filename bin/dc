@@ -5,6 +5,8 @@ cd "$(dirname "$0")/.."
 
 dc_build () {
     docker-compose build
+    # remove ssh key since it probably changed
+    ssh-keygen -R '[localhost]:8822' 2> /dev/null
 }
 
 dc_stop () {
