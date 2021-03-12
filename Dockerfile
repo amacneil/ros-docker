@@ -25,8 +25,9 @@ RUN apt-get install -qq ros-noetic-desktop ros-noetic-rosbridge-suite
 RUN apt-get install -qq ros-foxy-desktop
 
 # install node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g yarn
 
 # install openssh-server
 RUN apt-get install -qq openssh-server \
