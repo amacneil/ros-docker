@@ -21,7 +21,7 @@ dc_restart () {
     dc_up
 }
 
-case "$1" in
+case "${1:-help}" in
 build)
     dc_build
     dc_restart

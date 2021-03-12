@@ -3,8 +3,6 @@ services:
   app:
     build:
       context: .
-    # environment:
-    #   - DISPLAY
     volumes:
       - .:/src
       - ./run/home/ubuntu:/home/ubuntu
