@@ -41,13 +41,17 @@ bash)
     dc_up
     docker-compose exec -u ubuntu app bash
     ;;
+tmux)
+    dc_up
+    docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
+    ;;
 ssh)
     dc_up
     ssh -Y -p 8822 -o XAuthLocation=/opt/X11/bin/xauth ubuntu@localhost
     ;;
-tmux)
+tmssh)
     dc_up
-    docker-compose exec -u ubuntu app tmux -CC new -A -s tmssh
+    ssh -Y -p 8822 -o XAuthLocation=/opt/X11/bin/xauth ubuntu@localhost -t 'tmux -CC new -A -s tmssh'
     ;;
 *)
     echo "Usage: bin/dc [bash|tmux|ssh|up|stop|build|restart]"

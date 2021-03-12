@@ -12,6 +12,7 @@ $ bin/dc restart    # stop (and rm) and restart container
 $ bin/dc bash       # jump into shell inside contianer
 $ bin/dc tmux       # jump into tmux inside container (with iTerm integration)
 $ bin/dc ssh        # ssh into container (with with X forwarding)
+$ bin/dc tmssh      # run tmux (with iTerm integration) over ssh (with X forwarding) [recommended]
 ```
 
 Home directory is mapped locally to `./run/home/ubuntu`.
