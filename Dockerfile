@@ -31,7 +31,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
 
 # install openssh-server
 RUN apt-get install -qq openssh-server \
-    && mkdir /var/run/sshd
+    && mkdir /var/run/sshd \
+    && sed -i 's/^.*AddressFamily.*$/AddressFamily inet/' /etc/ssh/sshd_config
 
 # install some more useful things
 RUN apt-get install -qq \
